@@ -68,7 +68,7 @@ export default function Detail() {
         </div>
       </section>
       <section className="bg-gray-800 py-16">
-        <div className="container mx-auto">
+        <div className="container mx-auto px-4">
           <h2 className="text-xl text-white font-bold mb-8">
             Rekomendasi Serupa
           </h2>
