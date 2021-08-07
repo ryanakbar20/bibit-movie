@@ -6,3 +6,17 @@
   background: url(./assets/images/cover-bg.jpg);
   background-repeat: no-repeat;
 }
+
+.cover-detail {
+  background: url(./assets/images/cover-detail.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.hide-scroll-bar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scroll-bar::-webkit-scrollbar {
+  display: none;
+}
