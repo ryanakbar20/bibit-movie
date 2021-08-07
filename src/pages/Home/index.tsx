@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Card, Header, SearchBar, Footer } from "../../components";
+import { Card, Header, SearchBar, Footer, ModalPoster } from "../../components";
 import { fetchPage, RootState } from "../../config/redux";
 import { useSelector } from "react-redux";
 
 export default function Home() {
   const landingPage = useSelector((state: RootState) => state.landingPage);
+  const [selected, setSelected] = useState(null);
+  const [visibleModal, setVisibleModal] = useState(false);
   const [search, setSearch] = useState("Batman");
   const [page, setPage] = useState(1);
 
@@ -71,6 +73,11 @@ export default function Home() {
     }
   }, []);
 
+  function handleClick(e: any) {
+    setSelected(e);
+    setVisibleModal(!visibleModal);
+  }
+
   return (
     <>
       <section className="cover-bg">
@@ -106,11 +113,11 @@ export default function Home() {
               {listMovie.map((item: any, index: any) => {
                 return listMovie.length === index + 1 ? (
                   <div key={index} ref={lastElement}>
-                    <Card data={item} />
+                    <Card data={item} onClick={() => handleClick(item)} />
                   </div>
                 ) : (
                   <div key={index}>
-                    <Card data={item} />
+                    <Card data={item} onClick={() => handleClick(item)} />
                   </div>
                 );
               })}
@@ -128,6 +135,11 @@ export default function Home() {
       <section className="bg-gray-900 text-center py-6">
         <Footer />
       </section>
+      <ModalPoster
+        visible={visibleModal}
+        onClose={() => setVisibleModal(!visibleModal)}
+        value={selected}
+      />
     </>
   );
 }

@@ -1,12 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Header, Card, Footer } from "../../components";
+import { Header, Card, Footer, ModalPoster } from "../../components";
 import { fetchPage, RootState } from "../../config/redux";
 import { useSelector } from "react-redux";
 
 export default function Detail() {
   const globalState = useSelector((state: RootState) => state);
   const query: any = useParams();
+  const [selected, setSelected] = useState(null);
+  const [visibleModal, setVisibleModal] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -20,6 +22,11 @@ export default function Detail() {
     }
     fetchData();
   }, [query]);
+
+  function handleClick(e: any) {
+    setSelected(e);
+    setVisibleModal(!visibleModal);
+  }
 
   const detailMovie = globalState.detailPage ? globalState.detailPage : {};
   const listMovie =
@@ -82,7 +89,7 @@ export default function Detail() {
                         key={index}
                         className="inline-block mr-4 w-40 h-auto"
                       >
-                        <Card data={item} />
+                        <Card data={item} onClick={() => handleClick(item)} />
                       </div>
                     )
                   );
@@ -94,6 +101,11 @@ export default function Detail() {
       <section className="bg-gray-900 text-center py-6">
         <Footer />
       </section>
+      <ModalPoster
+        visible={visibleModal}
+        onClose={() => setVisibleModal(!visibleModal)}
+        value={selected}
+      />
     </>
   );
 }
