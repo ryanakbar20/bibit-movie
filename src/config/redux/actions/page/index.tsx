@@ -8,11 +8,12 @@ export const fetchPage = (url: string, page: string, params: any) => {
     url,
     params,
   }).then((res) => {
-    store.dispatch({
-      type: FETCH_PAGE,
-      value: {
-        [page]: res.data,
-      },
-    });
+    res.data.Response &&
+      store.dispatch({
+        type: FETCH_PAGE,
+        value: {
+          [page]: res.data,
+        },
+      });
   });
 };

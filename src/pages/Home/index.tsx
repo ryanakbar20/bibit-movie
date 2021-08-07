@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Card, Header, SearchBar, Footer } from "../../components";
 import { fetchPage, RootState } from "../../config/redux";
 import { useSelector } from "react-redux";
@@ -8,13 +8,32 @@ export default function Home() {
   const [search, setSearch] = useState("Batman");
   const [page, setPage] = useState(1);
 
+  const [listMovie, setListMovie] = useState<any>([]);
+
+  useEffect(() => {
+    const newList =
+      landingPage && landingPage.Search ? landingPage.Search : null;
+
+    function setData() {
+      var flags = [],
+        output: any = [];
+
+      for (let i = 0; i < newList.length; i++) {
+        if (flags[newList[i].Title]) continue;
+        flags[newList[i].Title] = true;
+        output.push(newList[i]);
+      }
+      newList && setListMovie((prev: any) => [...prev, ...output]);
+    }
+    newList && setData();
+  }, [landingPage]);
+
   useEffect(() => {
     async function fetchData() {
       const params = {
         apikey: "faf7e5bb",
         s: search,
         page: page,
-        // type: "movie",
       };
       try {
         fetchPage(`http://www.omdbapi.com`, "landingPage", params);
@@ -32,13 +51,25 @@ export default function Home() {
   }, [search, page]);
 
   function handleSearch(e: any) {
-    // setTimeout(() => {
     setSearch(e.target.value);
-    // }, 1000);
+    setPage(1);
+    setListMovie([]);
   }
 
-  const listMovie =
-    landingPage && landingPage.Search ? landingPage.Search : null;
+  const observer: any = useRef();
+  const lastElement = useCallback((node: any) => {
+    if (observer.current) {
+      observer.current.disconnect();
+    }
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setPage((prev) => (prev += 1));
+      }
+    });
+    if (node) {
+      observer.current.observe(node);
+    }
+  }, []);
 
   return (
     <>
@@ -60,6 +91,8 @@ export default function Home() {
                   handleSearch={handleSearch}
                   value={search}
                   data={listMovie}
+                  lastElementRef={lastElement}
+                  // setSearch={(e: string) => setSearch(e)}
                 />
               </div>
             </div>
@@ -68,11 +101,24 @@ export default function Home() {
       </section>
       <section className="bg-gray-800 py-20">
         <div className="container mx-auto px-4">
-          {listMovie ? (
+          {listMovie.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-              {listMovie.map((item: any, index: string) => {
-                return <Card key={index} data={item} />;
+              {listMovie.map((item: any, index: any) => {
+                return listMovie.length === index + 1 ? (
+                  <div key={index} ref={lastElement}>
+                    <Card data={item} />
+                  </div>
+                ) : (
+                  <div key={index}>
+                    <Card data={item} />
+                  </div>
+                );
               })}
+              <div className="text-center">
+                <p className="text-lg animate-bounce text-white font-semibold">
+                  Loading...
+                </p>
+              </div>
             </div>
           ) : (
             <p className="text-xl text-white font-semibold text-center">

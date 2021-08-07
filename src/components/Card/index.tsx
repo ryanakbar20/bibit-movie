@@ -13,7 +13,7 @@ export default function Card({ data }: PropsCard) {
   return (
     <div
       onClick={() => handleClick(data.imdbID)}
-      className="group rounded-md cursor-pointer transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110 relative"
+      className="group rounded-md cursor-pointer transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110 relative h-full w-full"
     >
       <img
         className="h-full w-full rounded-md"

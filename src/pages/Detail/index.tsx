@@ -22,7 +22,10 @@ export default function Detail() {
   }, [query]);
 
   const detailMovie = globalState.detailPage ? globalState.detailPage : {};
-  const listMovie = globalState.landingPage ? globalState.landingPage : null;
+  const listMovie =
+    globalState.landingPage && globalState.landingPage.Search
+      ? globalState.landingPage.Search
+      : [];
 
   return (
     <>
@@ -72,11 +75,14 @@ export default function Detail() {
           <div className="flex overflow-x-scroll pb-10 hide-scroll-bar">
             <div className="flex flex-nowrap">
               {listMovie &&
-                listMovie.Search.map((item: any, index: string) => {
+                listMovie.map((item: any, index: string) => {
                   return (
                     item.imdbID !== query.id && (
-                      <div className="inline-block mr-4 w-40 h-auto">
-                        <Card key={index} data={item} />
+                      <div
+                        key={index}
+                        className="inline-block mr-4 w-40 h-auto"
+                      >
+                        <Card data={item} />
                       </div>
                     )
                   );
