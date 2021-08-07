@@ -114,17 +114,15 @@ export default function Home() {
                   </div>
                 );
               })}
-              <div className="text-center">
-                <p className="text-lg animate-bounce text-white font-semibold">
-                  Loading...
-                </p>
-              </div>
             </div>
           ) : (
             <p className="text-xl text-white font-semibold text-center">
               Film tidak ditemukan
             </p>
           )}
+          <p className="text-lg animate-bounce text-white font-semibold text-center">
+            Loading...
+          </p>
         </div>
       </section>
       <section className="bg-gray-900 text-center py-6">
