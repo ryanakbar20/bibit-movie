@@ -2,16 +2,17 @@ import { render, screen } from "@testing-library/react";
 import Card from ".";
 
 describe("Render Card Component", () => {
-  const posterUrl =
-    "https://m.media-amazon.com/images/M/MV5BYThjYzcyYzItNTVjNy00NDk0LTgwMWQtYjMwNmNlNWJhMzMyXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg";
+  const MOCK_FUNCTION = jest.fn();
+
   const data = {
     imdbID: "id123",
     Title: "Batman The Movie",
     Year: "2010",
-    Poster: posterUrl,
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BYThjYzcyYzItNTVjNy00NDk0LTgwMWQtYjMwNmNlNWJhMzMyXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
   };
 
-  render(<Card data={data} />);
+  render(<Card data={data} onClick={MOCK_FUNCTION} />);
 
   it("Content to be in the document", () => {
     const title = screen.getByText("Batman The Movie");
@@ -20,7 +21,7 @@ describe("Render Card Component", () => {
 
     expect(title).toBeInTheDocument();
     expect(year).toBeInTheDocument();
-    expect(image).toHaveAttribute("src", posterUrl);
+    expect(image).toHaveAttribute("src", data.Poster);
     expect(image).toHaveAttribute("alt", "poster-movie");
   });
 });

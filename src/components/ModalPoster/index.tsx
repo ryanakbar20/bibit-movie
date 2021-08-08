@@ -8,7 +8,7 @@ interface PropsModal {
 export default function ModalPoster(props: PropsModal) {
   const history = useHistory();
 
-  function handleClick(e: any) {
+  function handleClick() {
     history.push(`/detail/${props.value.imdbID}`);
   }
   return props.visible ? (
